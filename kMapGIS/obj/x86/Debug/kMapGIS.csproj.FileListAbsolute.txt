@@ -1,0 +1,8 @@
+d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\bin\Debug\kMapGIS.exe
+d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\bin\Debug\kMapGIS.pdb
+d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.csprojResolveAssemblyReference.cache
+d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.Form1.resources
+d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.Properties.Resources.resources
+d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.csproj.GenerateResource.Cache
+d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.exe
+d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.pdb
