@@ -17,6 +17,8 @@ namespace kMapGIS
 {
     public partial class MainForm : DevExpress.XtraBars.Ribbon.RibbonForm
     {
+        string chartField = "";
+
         public MainForm()
         {
             InitializeComponent();
@@ -30,6 +32,14 @@ namespace kMapGIS
             string mxdFilePath = System.IO.Path.Combine(directoryPath, "YuhaoKangCode.mxd");
             MainMapControl.LoadMxFile(mxdFilePath);
             MainMapControl.ActiveView.Refresh();
+
+            //添加图层
+            IFeatureLayer featureLayer = MainMapControl.Map.get_Layer(3) as IFeatureLayer;
+            IFields fields = featureLayer.FeatureClass.Fields;
+            for (int i = 0; i < fields.FieldCount; i++)
+            {
+                repositoryItemComboBoxPropertySelect.Items.Add(fields.get_Field(i).Name);
+            }
         }
 
         private void CopyToPageLayout()
@@ -276,6 +286,202 @@ namespace kMapGIS
                 featureSelection.SelectionSet.Add(Convert.ToInt32(row[0]));
             }
             MainMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, null, MainMapControl.ActiveView.Extent);
+        }
+
+        private void barButtonBarChart_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            //获取图层
+            IGeoFeatureLayer geoFeatureLayer = MainMapControl.Map.get_Layer(3) as IGeoFeatureLayer;
+
+            //渲染变量
+            IChartRenderer chartRender = new ChartRendererClass();
+            IRendererFields renderFields = chartRender as IRendererFields;
+
+            //获取数据
+            IDataStatistics dataStatistics = null;
+            IFeatureCursor featureCursor = null;
+            IQueryFilter queryFilter = new QueryFilterClass();
+            featureCursor = geoFeatureLayer.Search(queryFilter, true);
+
+            //获取先前的颜色
+            IFeature feature = featureCursor.NextFeature();
+            ISymbol preSymbol = geoFeatureLayer.Renderer.get_SymbolByFeature(feature);
+            IColor preColor = (preSymbol as IFillSymbol).Color;
+
+            //找到最大值
+            renderFields.AddField(barEditItemPropertySelect.EditValue.ToString());
+            dataStatistics = new DataStatisticsClass();
+            dataStatistics.Cursor = featureCursor as ICursor;
+            dataStatistics.Field = barEditItemPropertySelect.EditValue.ToString();
+
+            double maxProperty = dataStatistics.Statistics.Maximum;
+
+            //符号变量
+            IChartSymbol chartSymbol = null;
+            IFillSymbol fillSymbol = null;
+            IMarkerSymbol markerSymbol = null;
+
+            //条形图大小
+            IBarChartSymbol barChartSymbol = new BarChartSymbolClass();
+            barChartSymbol.Width = 6;
+
+            chartSymbol = barChartSymbol as IChartSymbol;
+            markerSymbol = barChartSymbol as IMarkerSymbol;
+            markerSymbol.Size = 30;
+
+            chartSymbol.MaxValue = maxProperty;
+            ISymbolArray symbolArray = barChartSymbol as ISymbolArray;
+
+            //条形图颜色
+            IRgbColor rgbColor = new RgbColorClass();
+            rgbColor.Red = 0;
+            rgbColor.Green = 0;
+            rgbColor.Blue = 255;
+
+            fillSymbol = new SimpleFillSymbolClass();
+            fillSymbol.Color = rgbColor;
+
+            symbolArray.AddSymbol(fillSymbol as ISymbol);
+            chartRender.ChartSymbol = barChartSymbol as IChartSymbol;
+
+            //底图颜色
+            rgbColor = new RgbColorClass();
+            rgbColor.Red = 255;
+            rgbColor.Green = 0;
+            rgbColor.Blue = 0;
+            fillSymbol = new SimpleFillSymbolClass();
+            fillSymbol.Color = rgbColor;
+            chartRender.BaseSymbol =preSymbol as ISymbol;
+
+            //进行渲染
+            chartRender.UseOverposter = false;
+            chartRender.CreateLegend();
+            geoFeatureLayer.Renderer = chartRender as IFeatureRenderer;
+            MainMapControl.Refresh();
+            MainTOCControl.Update();
+
+        }
+
+        private void barButtonUniqueValue_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            IGeoFeatureLayer geoFeatureLayer = MainMapControl.Map.get_Layer(3) as IGeoFeatureLayer;
+
+            IUniqueValueRenderer uniqueRender = new UniqueValueRendererClass();
+            uniqueRender.FieldCount = 1;
+            uniqueRender.set_Field(0, barEditItemPropertySelect.EditValue.ToString());
+
+            IQueryFilter queryFilter = new QueryFilterClass();
+            IRandomColorRamp randomColorRamp = new RandomColorRampClass();
+            randomColorRamp.Size = geoFeatureLayer.FeatureClass.FeatureCount(queryFilter);
+
+            bool success = false;
+            randomColorRamp.CreateRamp(out success);
+            IEnumColors enumColors = randomColorRamp.Colors;
+
+            IFeatureCursor featureCursor = geoFeatureLayer.FeatureClass.Search(queryFilter, true);
+
+            IFeature feature = featureCursor.NextFeature();
+            int fieldIndex = feature.Fields.FindField(barEditItemPropertySelect.EditValue.ToString());
+            object codeValue = null;
+            while (feature != null)
+            {
+                codeValue = feature.get_Value(fieldIndex);
+                barEditItemPropertySelect.EditValue.ToString();
+                feature = featureCursor.NextFeature();
+
+                IFillSymbol fillSymbol=new SimpleFillSymbolClass();
+                fillSymbol.Color = enumColors.Next();
+                uniqueRender.AddValue(codeValue.ToString(), "", fillSymbol as ISymbol);
+            }
+
+            geoFeatureLayer.Renderer = uniqueRender as IFeatureRenderer;
+            MainMapControl.Refresh();
+            MainTOCControl.Update();
+        }
+
+        private void barButtonGraduatedColors_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            IGeoFeatureLayer geoFeatureLayer = MainMapControl.Map.get_Layer(3) as IGeoFeatureLayer;
+
+            IBasicHistogram basicHistogram = new BasicTableHistogramClass();
+
+        }
+
+        private void barButtonPieChart_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            //获取图层
+            IGeoFeatureLayer geoFeatureLayer = MainMapControl.Map.get_Layer(3) as IGeoFeatureLayer;
+
+            //渲染变量
+            IChartRenderer chartRender = new ChartRendererClass();
+            IRendererFields renderFields = chartRender as IRendererFields;
+
+            //获取数据
+            IDataStatistics dataStatistics = null;
+            IFeatureCursor featureCursor = null;
+            IQueryFilter queryFilter = new QueryFilterClass();
+            featureCursor = geoFeatureLayer.Search(queryFilter, true);
+
+            //获取先前的颜色
+            IFeature feature = featureCursor.NextFeature();
+            ISymbol preSymbol = geoFeatureLayer.Renderer.get_SymbolByFeature(feature);
+            IColor preColor = (preSymbol as IFillSymbol).Color;
+
+            //找到最大值
+            renderFields.AddField(barEditItemPropertySelect.EditValue.ToString());
+            dataStatistics = new DataStatisticsClass();
+            dataStatistics.Cursor = featureCursor as ICursor;
+            dataStatistics.Field = barEditItemPropertySelect.EditValue.ToString();
+
+            double maxProperty = dataStatistics.Statistics.Maximum;
+
+            //符号变量
+            IChartSymbol chartSymbol = null;
+            IFillSymbol fillSymbol = null;
+            IMarkerSymbol markerSymbol = null;
+
+            //饼图属性
+            IPieChartSymbol pieChartSymbol = new PieChartSymbolClass();
+            pieChartSymbol.Clockwise = true;
+            pieChartSymbol.UseOutline = true;
+            ILineSymbol lineSymbol = new SimpleLineSymbolClass();
+
+            IRgbColor rgbColor = new RgbColorClass();
+            rgbColor.Red = 100;
+            rgbColor.Green = 205;
+            rgbColor.Blue = 30;
+            lineSymbol.Color = rgbColor;
+            lineSymbol.Width = 1;
+            pieChartSymbol.Outline = lineSymbol;
+
+            chartSymbol = pieChartSymbol as IChartSymbol;
+            markerSymbol = pieChartSymbol as IMarkerSymbol;
+            markerSymbol.Size = 30;
+
+            chartSymbol.MaxValue = maxProperty;
+            ISymbolArray symbolArray = pieChartSymbol as ISymbolArray;
+
+            //条形图颜色
+            IRgbColor rgbColor1 = new RgbColorClass();
+            rgbColor1.Red = 0;
+            rgbColor1.Green = 0;
+            rgbColor1.Blue = 255;
+
+            fillSymbol = new SimpleFillSymbolClass();
+            fillSymbol.Color = rgbColor1;
+
+            symbolArray.AddSymbol(fillSymbol as ISymbol);
+            chartRender.ChartSymbol = pieChartSymbol as IChartSymbol;
+
+            //底图颜色
+            chartRender.BaseSymbol = preSymbol as ISymbol;
+
+            //进行渲染
+            chartRender.UseOverposter = false;
+            chartRender.CreateLegend();
+            geoFeatureLayer.Renderer = chartRender as IFeatureRenderer;
+            MainMapControl.Refresh();
+            MainTOCControl.Update();
         }
     }
 }
