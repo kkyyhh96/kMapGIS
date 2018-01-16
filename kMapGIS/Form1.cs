@@ -42,6 +42,41 @@ namespace kMapGIS
             {
                 repositoryItemComboBoxPropertySelect.Items.Add(fields.get_Field(i).Name);
             }
+
+            //添加查询的属性
+            repositoryItemComboBoxCountry.Items.Add("全部村庄");
+            repositoryItemComboBoxProperty.Items.Add("人口数");
+            repositoryItemComboBoxProperty.Items.Add("人均耕地");
+
+            int layerIndex = 2; string fieldName = "权属名称";
+            GetValueFromField(layerIndex, fieldName, 1);
+            layerIndex = 2; fieldName = "地类名";
+            GetValueFromField(layerIndex, fieldName, 2);
+        }
+
+        private void GetValueFromField(int layerIndex, string fieldName, int comboxIndex)
+        {
+            //获取字段下所有的值
+            IFeatureLayer featureLayerLand = MainMapControl.Map.get_Layer(layerIndex) as IFeatureLayer;
+            IDataset dataSet = (IDataset)featureLayerLand.FeatureClass;
+            IQueryDef queryDef = ((IFeatureWorkspace)dataSet.Workspace).CreateQueryDef();
+            queryDef.Tables = dataSet.Name;
+            queryDef.SubFields = string.Format("DISTINCT ({0})", fieldName);
+            ICursor cursor = queryDef.Evaluate();
+            IRow row = cursor.NextRow();
+            while (row != null)
+            {
+                switch (comboxIndex)
+                {
+                    case 1:
+                        repositoryItemComboBoxCountry.Items.Add(row.get_Value(0).ToString());
+                        break;
+                    case 2:
+                        repositoryItemComboBoxProperty.Items.Add(row.get_Value(0).ToString());
+                        break;
+                }
+                row = cursor.NextRow();
+            }
         }
 
         private void CopyToPageLayout()
@@ -293,7 +328,7 @@ namespace kMapGIS
         private void barButtonBarChart_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             Dictionary<string, IRgbColor> dicFieldColor = new Dictionary<string, IRgbColor>();
-            IRgbColor rgbColor= new RgbColorClass();
+            IRgbColor rgbColor = new RgbColorClass();
             rgbColor.Red = 255; rgbColor.Green = 0; rgbColor.Blue = 0;
             dicFieldColor.Add("人口密度归一化", rgbColor);
             rgbColor = new RgbColorClass();
@@ -425,7 +460,7 @@ namespace kMapGIS
         private void barButtonGraduatedColors_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             IGeoFeatureLayer geoFeatureLayer = MainMapControl.Map.get_Layer(3) as IGeoFeatureLayer;
-            object dataFrequency,dataValues;
+            object dataFrequency, dataValues;
 
             ITableHistogram tableHistogram = new BasicTableHistogramClass();
             IBasicHistogram basicHistogram = (IBasicHistogram)tableHistogram;
@@ -466,7 +501,7 @@ namespace kMapGIS
             for (int breakIndex = 0; breakIndex <= classesCount - 1; breakIndex++)
             {
                 IColor color = enumColors.Next();
-                
+
                 ISimpleFillSymbol simpleFill = new SimpleFillSymbolClass();
                 simpleFill.Color = color;
                 simpleFill.Style = esriSimpleFillStyle.esriSFSSolid;
@@ -481,7 +516,7 @@ namespace kMapGIS
         private void barButtonPieChart_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             Dictionary<string, IRgbColor> dicFieldColor = new Dictionary<string, IRgbColor>();
-            IRgbColor rgbColor= new RgbColorClass();
+            IRgbColor rgbColor = new RgbColorClass();
             rgbColor.Red = 255; rgbColor.Green = 0; rgbColor.Blue = 0;
             dicFieldColor.Add("人口密度归一化", rgbColor);
             rgbColor = new RgbColorClass();
@@ -525,7 +560,7 @@ namespace kMapGIS
                 dataStatistics.Cursor = featureCursor as ICursor;
                 dataStatistics.Field = _keyValue.Key;
 
-                maxTemp= dataStatistics.Statistics.Maximum;
+                maxTemp = dataStatistics.Statistics.Maximum;
                 if (maxTemp >= maxProperty)
                     maxProperty = maxTemp;
             }
@@ -741,7 +776,7 @@ namespace kMapGIS
             //格网边框样式
             ISimpleMapGridBorder simpleMapGridBorder = new SimpleMapGridBorderClass();
             ISimpleLineSymbol simpleLineSymbol = new SimpleLineSymbolClass();
-            simpleLineSymbol.Style= esriSimpleLineStyle.esriSLSSolid;
+            simpleLineSymbol.Style = esriSimpleLineStyle.esriSLSSolid;
             IRgbColor rgbColorSimpleLine = new RgbColorClass();
             rgbColorSimpleLine.Red = 100; rgbColorSimpleLine.Green = 255; rgbColorSimpleLine.Blue = 0;
             simpleLineSymbol.Color = rgbColorSimpleLine;
@@ -794,7 +829,7 @@ namespace kMapGIS
             measureGrid.XIntervalSize = (maxX - minX) / 200;
             measureGrid.XOrigin = minX;
             measureGrid.YIntervalSize = (maxY - minY) / 200;
-            measureGrid.YOrigin=minY;
+            measureGrid.YOrigin = minY;
 
             IGraphicsContainer graphicsContainer = MainPageLayoutControl.ActiveView as IGraphicsContainer;
             IMapFrame mapFrame = graphicsContainer.FindFrame(map) as IMapFrame;
@@ -814,14 +849,14 @@ namespace kMapGIS
             textSymbol.Font = font;
 
             ITextElement textElement = new TextElementClass();
-            textElement.Symbol=textSymbol;
-            textElement.Text="横车镇土地利用图";
+            textElement.Symbol = textSymbol;
+            textElement.Text = "横车镇土地利用图";
 
-            IElement element=textElement as  IElement;
+            IElement element = textElement as IElement;
             element.Geometry = envelope as IGeometry;
 
             IGraphicsContainer graphicsContainer = MainPageLayoutControl.ActiveView as IGraphicsContainer;
-            graphicsContainer.AddElement(element,0);
+            graphicsContainer.AddElement(element, 0);
             MainPageLayoutControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
         }
         private void MainPageLayoutControl_OnMouseDown(object sender, IPageLayoutControlEvents_OnMouseDownEvent e)
@@ -886,6 +921,187 @@ namespace kMapGIS
                 envelope.SpatialReference = MainPageLayoutControl.ActiveView.FocusMap.SpatialReference;
             }
             return envelope;
+        }
+
+        private void barButtonItemSpatialCompute_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            IFeatureLayer featureLayer = MainMapControl.get_Layer(3) as FeatureLayer;
+            IFeatureClass featureClass = featureLayer.FeatureClass;
+            IQueryFilter queryFilter = new QueryFilterClass();
+            IFeatureCursor featureCursor = featureClass.Update(queryFilter, true);
+
+            double pop = Convert.ToDouble(barEditItemPopulation.EditValue.ToString());
+            double build = Convert.ToDouble(barEditItemBuilding.EditValue.ToString());
+            double slope = Convert.ToDouble(barEditItemSlope.EditValue.ToString());
+            double slope_std = Convert.ToDouble(barEditItemSlopeStd.EditValue.ToString());
+            double altitude = Convert.ToDouble(barEditItemAltitude.EditValue.ToString());
+
+            IFeature feature = featureCursor.NextFeature();
+            int populationIndex = featureCursor.FindField("人口密度归一化");
+            int buildingIndex = featureCursor.FindField("建筑用地归一化");
+            int slopeIndex = featureCursor.FindField("坡度归一化");
+            int slopeStdIndex = featureCursor.FindField("坡度标准差归一化");
+            int altitudeIndex = featureCursor.FindField("海拔归一化");
+            int scoreIndex = featureCursor.FindField("总分");
+
+            while (feature != null)
+            {
+                double pop_t = Convert.ToDouble(feature.get_Value(populationIndex));
+                double build_t = Convert.ToDouble(feature.get_Value(buildingIndex));
+                double slope_t = Convert.ToDouble(feature.get_Value(slopeIndex));
+                double slope_std_t = Convert.ToDouble(feature.get_Value(slopeStdIndex));
+                double altitude_t = Convert.ToDouble(feature.get_Value(altitudeIndex));
+
+                double totalScore = pop * pop_t + build * build_t + slope * slope_t + slope_std * slope_std_t + altitude * altitude_t;
+                feature.set_Value(scoreIndex, totalScore);
+                featureCursor.UpdateFeature(feature);
+                feature = featureCursor.NextFeature();
+            }
+        }
+
+        private void barButtonItemStatistic_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            double sum = 0;
+            if (barEditItemProperty.EditValue.ToString() != "人口数" && barEditItemProperty.EditValue.ToString() != "人均耕地")
+            {
+                //统计地类面积
+                IGeoFeatureLayer featureLayer = MainMapControl.get_Layer(2) as IGeoFeatureLayer;
+                IFeatureClass featureClass = featureLayer.FeatureClass;
+
+                if (barEditItemCountry.EditValue.ToString() != "全部村庄")
+                {
+                    //分村落统计
+                    IQueryFilter queryFilter = new QueryFilterClass();
+                    queryFilter.WhereClause = string.Format("\"{0}\"=\'{1}\' AND \"{2}\"=\'{3}\'", "权属名称", barEditItemCountry.EditValue.ToString(), "地类名", barEditItemProperty.EditValue.ToString());
+
+                    IFeatureCursor featureCursor = featureClass.Search(queryFilter, true);
+                    IFeature feature = featureCursor.NextFeature();
+
+                    int fieldIndex;
+                    fieldIndex = feature.Fields.FindField("Shape_Area");
+                    while (feature != null)
+                    {
+                        sum += Convert.ToDouble(feature.get_Value(fieldIndex));
+                        feature = featureCursor.NextFeature();
+                    }
+                    barStaticItemStatisticsResult.Caption = string.Format("{0}{1}总面积为:{2}平方米", barEditItemCountry.EditValue.ToString(), barEditItemProperty.EditValue.ToString(), Convert.ToInt32(sum).ToString());
+                }
+                else
+                {
+                    //全村统计
+                    IQueryFilter queryFilter = new QueryFilterClass();
+
+                    IFeatureCursor featureCursor = featureClass.Search(queryFilter, true);
+                    IFeature feature = featureCursor.NextFeature();
+
+                    int fieldIndex;
+                    fieldIndex = feature.Fields.FindField("Shape_Area");
+                    while (feature != null)
+                    {
+                        sum += Convert.ToDouble(feature.get_Value(fieldIndex));
+                        feature = featureCursor.NextFeature();
+                    }
+                    barStaticItemStatisticsResult.Caption = string.Format("全部村庄{0}总面积为:{1}平方米", barEditItemProperty.EditValue.ToString(), Convert.ToInt32(sum).ToString());
+                }
+            }
+            else if (barEditItemProperty.EditValue.ToString() == "人口数")
+            {
+                //统计人口数量
+                IGeoFeatureLayer featureLayer = MainMapControl.get_Layer(3) as IGeoFeatureLayer;
+                IFeatureClass featureClass = featureLayer.FeatureClass;
+
+                if (barEditItemCountry.EditValue.ToString() != "全部村庄")
+                {
+                    //各村落人口数量
+                    IQueryFilter queryFilter = new QueryFilterClass();
+                    queryFilter.WhereClause = string.Format("\"{0}\"=\'{1}\'", "权属名称", barEditItemCountry.EditValue.ToString());
+
+                    IFeatureCursor featureCursor = featureClass.Search(queryFilter, true);
+                    IFeature feature = featureCursor.NextFeature();
+
+                    int fieldIndex;
+                    fieldIndex = feature.Fields.FindField("population");
+                    sum = Convert.ToDouble((feature.get_Value(fieldIndex)));
+                    barStaticItemStatisticsResult.Caption = string.Format("{0}总人口数为:{1}人", barEditItemCountry.EditValue.ToString(), Convert.ToInt32(sum).ToString());
+                }
+                else
+                {
+                    //全部人口数量
+                    IQueryFilter queryFilter = new QueryFilterClass();
+
+                    IFeatureCursor featureCursor = featureClass.Search(queryFilter, true);
+                    IFeature feature = featureCursor.NextFeature();
+                    int fieldIndex;
+                    fieldIndex = feature.Fields.FindField("population");
+                    while (feature != null)
+                    {
+                        sum += Convert.ToDouble(feature.get_Value(fieldIndex));
+                        feature = featureCursor.NextFeature();
+                    }
+                    barStaticItemStatisticsResult.Caption = string.Format("{0}总人口数为:{1}人", barEditItemCountry.EditValue.ToString(), Convert.ToInt32(sum).ToString());
+                }
+            }
+            else
+            {
+                //人均耕地面积
+                IGeoFeatureLayer featureLayerLand = MainMapControl.get_Layer(2) as IGeoFeatureLayer;
+                IFeatureClass featureClassLand = featureLayerLand.FeatureClass;
+
+                IGeoFeatureLayer featureLayer= MainMapControl.get_Layer(3) as IGeoFeatureLayer;
+                IFeatureClass featureClass= featureLayer.FeatureClass;
+                if (barEditItemCountry.EditValue.ToString() != "全部村庄")
+                {
+                    //各村人均耕地面积
+                    //耕地面积
+                    IQueryFilter queryFilterLand = new QueryFilterClass();
+                    queryFilterLand.WhereClause = string.Format("\"{0}\"=\'{1}\' AND (\"{2}\"=\'{3}\' OR \"{4}\"=\'{5}\')",
+                        "权属名称", barEditItemCountry.EditValue.ToString(), "地类名", "水田", "地类名", "旱地");
+
+                    IFeatureCursor featureCursorLand = featureClassLand.Search(queryFilterLand, true);
+                    IFeature featureLand = featureCursorLand.NextFeature();
+
+                    int fieldIndex;
+                    fieldIndex = featureLand.Fields.FindField("Shape_Area");
+                    while (featureLand != null)
+                    {
+                        sum += Convert.ToDouble(featureLand.get_Value(fieldIndex));
+                        featureLand = featureCursorLand.NextFeature();
+                    }
+
+                    IQueryFilter queryFilter = new QueryFilterClass();
+                    queryFilter.WhereClause = string.Format("\"{0}\"=\'{1}\'", "权属名称", barEditItemCountry.EditValue.ToString());
+
+                    IFeatureCursor featureCursor = featureClass.Search(queryFilter, true);
+                    IFeature feature = featureCursor.NextFeature();
+
+                    fieldIndex = feature.Fields.FindField("population");
+                    double popu=Convert.ToDouble((feature.get_Value(fieldIndex)));
+                    sum = sum/popu;
+
+                    barStaticItemStatisticsResult.Caption = string.Format("{0}人均耕地面积为:{1}平方米/人", barEditItemCountry.EditValue.ToString(), Convert.ToInt32(sum).ToString());
+                }
+                else
+                {
+                    IQueryFilter queryFilter = new QueryFilterClass();
+
+                    IFeatureCursor featureCursor = featureClass.Search(queryFilter, true);
+                    IFeature feature = featureCursor.NextFeature();
+                    int fieldIndex;
+                    fieldIndex = feature.Fields.FindField("population");
+                    while (feature != null)
+                    {
+                        sum += Convert.ToDouble(feature.get_Value(fieldIndex));
+                        feature = featureCursor.NextFeature();
+                    }
+                    barStaticItemStatisticsResult.Caption = string.Format("{0}总人口数为:{1}人", barEditItemCountry.EditValue.ToString(), Convert.ToInt32(sum).ToString());
+                }
+            }
+
+        }
+
+        private void barButtonItemColorBuffer_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+
         }
     }
 }

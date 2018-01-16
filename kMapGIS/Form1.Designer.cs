@@ -30,8 +30,8 @@ namespace kMapGIS
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            DevExpress.Utils.Animation.PushTransition pushTransition2 = new DevExpress.Utils.Animation.PushTransition();
-            DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
+            DevExpress.Utils.Animation.PushTransition pushTransition1 = new DevExpress.Utils.Animation.PushTransition();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode1 = new DevExpress.XtraGrid.GridLevelNode();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.ribbonControl1 = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.barStaticStatus = new DevExpress.XtraBars.BarStaticItem();
@@ -62,6 +62,23 @@ namespace kMapGIS
             this.barCheckItemArrow = new DevExpress.XtraBars.BarCheckItem();
             this.barCheckItemScale = new DevExpress.XtraBars.BarCheckItem();
             this.barCheckItemGrid = new DevExpress.XtraBars.BarCheckItem();
+            this.barCheckItemChartName = new DevExpress.XtraBars.BarCheckItem();
+            this.barEditItemPopulation = new DevExpress.XtraBars.BarEditItem();
+            this.repositoryItemTextEdit5 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
+            this.barEditItemBuilding = new DevExpress.XtraBars.BarEditItem();
+            this.repositoryItemTextEdit6 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
+            this.barEditItemSlope = new DevExpress.XtraBars.BarEditItem();
+            this.repositoryItemTextEdit7 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
+            this.barEditItemSlopeStd = new DevExpress.XtraBars.BarEditItem();
+            this.repositoryItemTextEdit8 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
+            this.barEditItemAltitude = new DevExpress.XtraBars.BarEditItem();
+            this.repositoryItemTextEdit9 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
+            this.barButtonItemSpatialCompute = new DevExpress.XtraBars.BarButtonItem();
+            this.barEditItemCountry = new DevExpress.XtraBars.BarEditItem();
+            this.repositoryItemComboBoxCountry = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+            this.barEditItemProperty = new DevExpress.XtraBars.BarEditItem();
+            this.repositoryItemComboBoxProperty = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+            this.barButtonItemStatistic = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -76,6 +93,7 @@ namespace kMapGIS
             this.ribbonPageGroup9 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage4 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup10 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup12 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPage5 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup11 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.repositoryItemImageEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
@@ -92,6 +110,10 @@ namespace kMapGIS
             this.repositoryItemLookUpEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.repositoryItemLookUpPropertySelect = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.repositoryItemComboBox5 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+            this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
+            this.repositoryItemPopupContainerEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPopupContainerEdit();
+            this.repositoryItemGridLookUpEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemGridLookUpEdit();
+            this.repositoryItemGridLookUpEdit1View = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.ribbonStatusBar1 = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
             this.barEditItem1 = new DevExpress.XtraBars.BarEditItem();
             this.tabPageControl = new DevExpress.XtraTab.XtraTabControl();
@@ -108,10 +130,18 @@ namespace kMapGIS
             this.barButtonItem4 = new DevExpress.XtraBars.BarButtonItem();
             this.barCheckItem1 = new DevExpress.XtraBars.BarCheckItem();
             this.popupMenuTOCControl = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.barCheckItemChartName = new DevExpress.XtraBars.BarCheckItem();
+            this.barStaticItemStatisticsResult = new DevExpress.XtraBars.BarStaticItem();
+            this.barButtonItemColorBuffer = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxPropertySelect)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxCountry)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxProperty)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).BeginInit();
@@ -126,6 +156,10 @@ namespace kMapGIS
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemLookUpEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemLookUpPropertySelect)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemGridLookUpEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemGridLookUpEdit1View)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabPageControl)).BeginInit();
             this.tabPageControl.SuspendLayout();
             this.tabPageMap.SuspendLayout();
@@ -179,9 +213,20 @@ namespace kMapGIS
             this.barCheckItemArrow,
             this.barCheckItemScale,
             this.barCheckItemGrid,
-            this.barCheckItemChartName});
+            this.barCheckItemChartName,
+            this.barEditItemPopulation,
+            this.barEditItemBuilding,
+            this.barEditItemSlope,
+            this.barEditItemSlopeStd,
+            this.barEditItemAltitude,
+            this.barButtonItemSpatialCompute,
+            this.barEditItemCountry,
+            this.barEditItemProperty,
+            this.barButtonItemStatistic,
+            this.barStaticItemStatisticsResult,
+            this.barButtonItemColorBuffer});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl1.MaxItemId = 71;
+            this.ribbonControl1.MaxItemId = 85;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
@@ -204,7 +249,17 @@ namespace kMapGIS
             this.repositoryItemLookUpEdit2,
             this.repositoryItemLookUpPropertySelect,
             this.repositoryItemComboBox5,
-            this.repositoryItemComboBoxPropertySelect});
+            this.repositoryItemComboBoxPropertySelect,
+            this.repositoryItemCheckEdit1,
+            this.repositoryItemPopupContainerEdit1,
+            this.repositoryItemGridLookUpEdit1,
+            this.repositoryItemTextEdit5,
+            this.repositoryItemTextEdit6,
+            this.repositoryItemTextEdit7,
+            this.repositoryItemTextEdit8,
+            this.repositoryItemTextEdit9,
+            this.repositoryItemComboBoxCountry,
+            this.repositoryItemComboBoxProperty});
             this.ribbonControl1.Size = new System.Drawing.Size(1236, 147);
             this.ribbonControl1.StatusBar = this.ribbonStatusBar1;
             // 
@@ -360,7 +415,7 @@ namespace kMapGIS
             // workspaceManager1
             // 
             this.workspaceManager1.TargetControl = this;
-            this.workspaceManager1.TransitionType = pushTransition2;
+            this.workspaceManager1.TransitionType = pushTransition1;
             // 
             // barButtonUniqueValue
             // 
@@ -429,6 +484,120 @@ namespace kMapGIS
             this.barCheckItemGrid.Name = "barCheckItemGrid";
             this.barCheckItemGrid.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
             // 
+            // barCheckItemChartName
+            // 
+            this.barCheckItemChartName.Caption = "图名";
+            this.barCheckItemChartName.Id = 70;
+            this.barCheckItemChartName.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barCheckItemChartName.ImageOptions.Image")));
+            this.barCheckItemChartName.Name = "barCheckItemChartName";
+            this.barCheckItemChartName.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            // 
+            // barEditItemPopulation
+            // 
+            this.barEditItemPopulation.Caption = "人口密度";
+            this.barEditItemPopulation.Edit = this.repositoryItemTextEdit5;
+            this.barEditItemPopulation.Id = 74;
+            this.barEditItemPopulation.Name = "barEditItemPopulation";
+            // 
+            // repositoryItemTextEdit5
+            // 
+            this.repositoryItemTextEdit5.AutoHeight = false;
+            this.repositoryItemTextEdit5.Name = "repositoryItemTextEdit5";
+            // 
+            // barEditItemBuilding
+            // 
+            this.barEditItemBuilding.Caption = "建筑用地";
+            this.barEditItemBuilding.Edit = this.repositoryItemTextEdit6;
+            this.barEditItemBuilding.Id = 75;
+            this.barEditItemBuilding.Name = "barEditItemBuilding";
+            // 
+            // repositoryItemTextEdit6
+            // 
+            this.repositoryItemTextEdit6.AutoHeight = false;
+            this.repositoryItemTextEdit6.Name = "repositoryItemTextEdit6";
+            // 
+            // barEditItemSlope
+            // 
+            this.barEditItemSlope.Caption = "坡度均值";
+            this.barEditItemSlope.Edit = this.repositoryItemTextEdit7;
+            this.barEditItemSlope.Id = 76;
+            this.barEditItemSlope.Name = "barEditItemSlope";
+            // 
+            // repositoryItemTextEdit7
+            // 
+            this.repositoryItemTextEdit7.AutoHeight = false;
+            this.repositoryItemTextEdit7.Name = "repositoryItemTextEdit7";
+            // 
+            // barEditItemSlopeStd
+            // 
+            this.barEditItemSlopeStd.Caption = "坡度方差";
+            this.barEditItemSlopeStd.Edit = this.repositoryItemTextEdit8;
+            this.barEditItemSlopeStd.Id = 77;
+            this.barEditItemSlopeStd.Name = "barEditItemSlopeStd";
+            // 
+            // repositoryItemTextEdit8
+            // 
+            this.repositoryItemTextEdit8.AutoHeight = false;
+            this.repositoryItemTextEdit8.Name = "repositoryItemTextEdit8";
+            // 
+            // barEditItemAltitude
+            // 
+            this.barEditItemAltitude.Caption = "平均海拔";
+            this.barEditItemAltitude.Edit = this.repositoryItemTextEdit9;
+            this.barEditItemAltitude.Id = 78;
+            this.barEditItemAltitude.Name = "barEditItemAltitude";
+            // 
+            // repositoryItemTextEdit9
+            // 
+            this.repositoryItemTextEdit9.AutoHeight = false;
+            this.repositoryItemTextEdit9.Name = "repositoryItemTextEdit9";
+            // 
+            // barButtonItemSpatialCompute
+            // 
+            this.barButtonItemSpatialCompute.Caption = "折旧潜力计算";
+            this.barButtonItemSpatialCompute.Id = 79;
+            this.barButtonItemSpatialCompute.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemSpatialCompute.ImageOptions.Image")));
+            this.barButtonItemSpatialCompute.Name = "barButtonItemSpatialCompute";
+            this.barButtonItemSpatialCompute.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.barButtonItemSpatialCompute.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemSpatialCompute_ItemClick);
+            // 
+            // barEditItemCountry
+            // 
+            this.barEditItemCountry.Caption = "村落";
+            this.barEditItemCountry.Edit = this.repositoryItemComboBoxCountry;
+            this.barEditItemCountry.Id = 80;
+            this.barEditItemCountry.Name = "barEditItemCountry";
+            // 
+            // repositoryItemComboBoxCountry
+            // 
+            this.repositoryItemComboBoxCountry.AutoHeight = false;
+            this.repositoryItemComboBoxCountry.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemComboBoxCountry.Name = "repositoryItemComboBoxCountry";
+            // 
+            // barEditItemProperty
+            // 
+            this.barEditItemProperty.Caption = "属性";
+            this.barEditItemProperty.Edit = this.repositoryItemComboBoxProperty;
+            this.barEditItemProperty.Id = 81;
+            this.barEditItemProperty.Name = "barEditItemProperty";
+            // 
+            // repositoryItemComboBoxProperty
+            // 
+            this.repositoryItemComboBoxProperty.AutoHeight = false;
+            this.repositoryItemComboBoxProperty.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemComboBoxProperty.Name = "repositoryItemComboBoxProperty";
+            // 
+            // barButtonItemStatistic
+            // 
+            this.barButtonItemStatistic.Caption = "统计";
+            this.barButtonItemStatistic.Id = 82;
+            this.barButtonItemStatistic.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItemStatistic.ImageOptions.Image")));
+            this.barButtonItemStatistic.Name = "barButtonItemStatistic";
+            this.barButtonItemStatistic.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.barButtonItemStatistic.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemStatistic_ItemClick);
+            // 
             // ribbonPage1
             // 
             this.ribbonPage1.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
@@ -472,8 +641,12 @@ namespace kMapGIS
             // 
             // ribbonPageGroup4
             // 
+            this.ribbonPageGroup4.ItemLinks.Add(this.barEditItemCountry);
+            this.ribbonPageGroup4.ItemLinks.Add(this.barEditItemProperty);
+            this.ribbonPageGroup4.ItemLinks.Add(this.barButtonItemStatistic);
+            this.ribbonPageGroup4.ItemLinks.Add(this.barStaticItemStatisticsResult);
             this.ribbonPageGroup4.Name = "ribbonPageGroup4";
-            this.ribbonPageGroup4.Text = "查询";
+            this.ribbonPageGroup4.Text = "地类统计";
             // 
             // ribbonPageGroup5
             // 
@@ -518,14 +691,26 @@ namespace kMapGIS
             // ribbonPage4
             // 
             this.ribbonPage4.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
-            this.ribbonPageGroup10});
+            this.ribbonPageGroup10,
+            this.ribbonPageGroup12});
             this.ribbonPage4.Name = "ribbonPage4";
             this.ribbonPage4.Text = "折旧潜力分析";
             // 
             // ribbonPageGroup10
             // 
+            this.ribbonPageGroup10.ItemLinks.Add(this.barEditItemPopulation);
+            this.ribbonPageGroup10.ItemLinks.Add(this.barEditItemBuilding);
+            this.ribbonPageGroup10.ItemLinks.Add(this.barEditItemSlope);
+            this.ribbonPageGroup10.ItemLinks.Add(this.barEditItemSlopeStd);
+            this.ribbonPageGroup10.ItemLinks.Add(this.barEditItemAltitude);
             this.ribbonPageGroup10.Name = "ribbonPageGroup10";
-            this.ribbonPageGroup10.Text = "ribbonPageGroup10";
+            this.ribbonPageGroup10.Text = "指标选取";
+            // 
+            // ribbonPageGroup12
+            // 
+            this.ribbonPageGroup12.ItemLinks.Add(this.barButtonItemSpatialCompute);
+            this.ribbonPageGroup12.Name = "ribbonPageGroup12";
+            this.ribbonPageGroup12.Text = "折旧潜力计算";
             // 
             // ribbonPage5
             // 
@@ -541,6 +726,7 @@ namespace kMapGIS
             this.ribbonPageGroup11.ItemLinks.Add(this.barCheckItemScale);
             this.ribbonPageGroup11.ItemLinks.Add(this.barCheckItemGrid);
             this.ribbonPageGroup11.ItemLinks.Add(this.barCheckItemChartName);
+            this.ribbonPageGroup11.ItemLinks.Add(this.barButtonItemColorBuffer);
             this.ribbonPageGroup11.Name = "ribbonPageGroup11";
             this.ribbonPageGroup11.Text = "地图整饰";
             // 
@@ -633,6 +819,33 @@ namespace kMapGIS
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.repositoryItemComboBox5.Name = "repositoryItemComboBox5";
             // 
+            // repositoryItemCheckEdit1
+            // 
+            this.repositoryItemCheckEdit1.AutoHeight = false;
+            this.repositoryItemCheckEdit1.Name = "repositoryItemCheckEdit1";
+            // 
+            // repositoryItemPopupContainerEdit1
+            // 
+            this.repositoryItemPopupContainerEdit1.AutoHeight = false;
+            this.repositoryItemPopupContainerEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemPopupContainerEdit1.Name = "repositoryItemPopupContainerEdit1";
+            // 
+            // repositoryItemGridLookUpEdit1
+            // 
+            this.repositoryItemGridLookUpEdit1.AutoHeight = false;
+            this.repositoryItemGridLookUpEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemGridLookUpEdit1.Name = "repositoryItemGridLookUpEdit1";
+            this.repositoryItemGridLookUpEdit1.View = this.repositoryItemGridLookUpEdit1View;
+            // 
+            // repositoryItemGridLookUpEdit1View
+            // 
+            this.repositoryItemGridLookUpEdit1View.FocusRectStyle = DevExpress.XtraGrid.Views.Grid.DrawFocusRectStyle.RowFocus;
+            this.repositoryItemGridLookUpEdit1View.Name = "repositoryItemGridLookUpEdit1View";
+            this.repositoryItemGridLookUpEdit1View.OptionsSelection.EnableAppearanceFocusedCell = false;
+            this.repositoryItemGridLookUpEdit1View.OptionsView.ShowGroupPanel = false;
+            // 
             // ribbonStatusBar1
             // 
             this.ribbonStatusBar1.ItemLinks.Add(this.barStaticStatus);
@@ -704,9 +917,9 @@ namespace kMapGIS
             // 
             // gridControl
             // 
-            gridLevelNode2.RelationName = "Level1";
+            gridLevelNode1.RelationName = "Level1";
             this.gridControl.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
-            gridLevelNode2});
+            gridLevelNode1});
             this.gridControl.Location = new System.Drawing.Point(0, -1);
             this.gridControl.MainView = this.gridView1;
             this.gridControl.MenuManager = this.ribbonControl1;
@@ -769,13 +982,22 @@ namespace kMapGIS
             this.popupMenuTOCControl.Name = "popupMenuTOCControl";
             this.popupMenuTOCControl.Ribbon = this.ribbonControl1;
             // 
-            // barCheckItemChartName
+            // barStaticItemStatisticsResult
             // 
-            this.barCheckItemChartName.Caption = "图名";
-            this.barCheckItemChartName.Id = 70;
-            this.barCheckItemChartName.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barCheckItem2.ImageOptions.Image")));
-            this.barCheckItemChartName.Name = "barCheckItemChartName";
-            this.barCheckItemChartName.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.barStaticItemStatisticsResult.Caption = "结果";
+            this.barStaticItemStatisticsResult.Id = 83;
+            this.barStaticItemStatisticsResult.Name = "barStaticItemStatisticsResult";
+            this.barStaticItemStatisticsResult.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.barStaticItemStatisticsResult.TextAlignment = System.Drawing.StringAlignment.Near;
+            // 
+            // barButtonItemColorBuffer
+            // 
+            this.barButtonItemColorBuffer.Caption = "色带";
+            this.barButtonItemColorBuffer.Id = 84;
+            this.barButtonItemColorBuffer.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem1.ImageOptions.Image")));
+            this.barButtonItemColorBuffer.Name = "barButtonItemColorBuffer";
+            this.barButtonItemColorBuffer.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.barButtonItemColorBuffer.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItemColorBuffer_ItemClick);
             // 
             // MainForm
             // 
@@ -794,6 +1016,13 @@ namespace kMapGIS
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxPropertySelect)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxCountry)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxProperty)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemTextEdit1)).EndInit();
@@ -808,6 +1037,10 @@ namespace kMapGIS
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemLookUpEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemLookUpPropertySelect)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPopupContainerEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemGridLookUpEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemGridLookUpEdit1View)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabPageControl)).EndInit();
             this.tabPageControl.ResumeLayout(false);
             this.tabPageMap.ResumeLayout(false);
@@ -903,6 +1136,29 @@ namespace kMapGIS
         private DevExpress.XtraBars.BarCheckItem barCheckItemScale;
         private DevExpress.XtraBars.BarCheckItem barCheckItemGrid;
         private DevExpress.XtraBars.BarCheckItem barCheckItemChartName;
+        private DevExpress.XtraBars.BarEditItem barEditItemPopulation;
+        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit5;
+        private DevExpress.XtraBars.BarEditItem barEditItemBuilding;
+        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit6;
+        private DevExpress.XtraBars.BarEditItem barEditItemSlope;
+        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit7;
+        private DevExpress.XtraBars.BarEditItem barEditItemSlopeStd;
+        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit8;
+        private DevExpress.XtraBars.BarEditItem barEditItemAltitude;
+        private DevExpress.XtraEditors.Repository.RepositoryItemTextEdit repositoryItemTextEdit9;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemSpatialCompute;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup12;
+        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repositoryItemCheckEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemPopupContainerEdit repositoryItemPopupContainerEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemGridLookUpEdit repositoryItemGridLookUpEdit1;
+        private DevExpress.XtraGrid.Views.Grid.GridView repositoryItemGridLookUpEdit1View;
+        private DevExpress.XtraBars.BarEditItem barEditItemCountry;
+        private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBoxCountry;
+        private DevExpress.XtraBars.BarEditItem barEditItemProperty;
+        private DevExpress.XtraEditors.Repository.RepositoryItemComboBox repositoryItemComboBoxProperty;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemStatistic;
+        private DevExpress.XtraBars.BarStaticItem barStaticItemStatisticsResult;
+        private DevExpress.XtraBars.BarButtonItem barButtonItemColorBuffer;
     }
 }
 
