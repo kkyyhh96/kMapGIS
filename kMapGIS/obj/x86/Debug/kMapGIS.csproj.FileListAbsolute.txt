@@ -7,3 +7,4 @@ d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug
 d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.pdb
 d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.exe.licenses
 d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.MainForm.resources
+d:\Users\KYH\documents\visual studio 2012\Projects\kMapGIS\kMapGIS\obj\x86\Debug\kMapGIS.SymbolSelection.resources

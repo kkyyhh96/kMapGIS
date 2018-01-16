@@ -31,6 +31,7 @@ namespace kMapGIS
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             DevExpress.Utils.Animation.PushTransition pushTransition2 = new DevExpress.Utils.Animation.PushTransition();
+            DevExpress.XtraGrid.GridLevelNode gridLevelNode2 = new DevExpress.XtraGrid.GridLevelNode();
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.ribbonControl1 = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.barStaticStatus = new DevExpress.XtraBars.BarStaticItem();
@@ -56,6 +57,11 @@ namespace kMapGIS
             this.barButtonUniqueValue = new DevExpress.XtraBars.BarButtonItem();
             this.barEditItemPropertySelect = new DevExpress.XtraBars.BarEditItem();
             this.repositoryItemComboBoxPropertySelect = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
+            this.barButtonGraduatedColors = new DevExpress.XtraBars.BarButtonItem();
+            this.barCheckItemLegend = new DevExpress.XtraBars.BarCheckItem();
+            this.barCheckItemArrow = new DevExpress.XtraBars.BarCheckItem();
+            this.barCheckItemScale = new DevExpress.XtraBars.BarCheckItem();
+            this.barCheckItemGrid = new DevExpress.XtraBars.BarCheckItem();
             this.ribbonPage1 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup1 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup2 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -67,6 +73,11 @@ namespace kMapGIS
             this.ribbonPageGroup7 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup6 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.ribbonPageGroup8 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPageGroup9 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPage4 = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.ribbonPageGroup10 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.ribbonPage5 = new DevExpress.XtraBars.Ribbon.RibbonPage();
+            this.ribbonPageGroup11 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.repositoryItemImageEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
             this.repositoryItemPictureEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
             this.repositoryItemTextEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
@@ -97,10 +108,7 @@ namespace kMapGIS
             this.barButtonItem4 = new DevExpress.XtraBars.BarButtonItem();
             this.barCheckItem1 = new DevExpress.XtraBars.BarCheckItem();
             this.popupMenuTOCControl = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.ribbonPageGroup9 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
-            this.barButtonGraduatedColors = new DevExpress.XtraBars.BarButtonItem();
-            this.ribbonPage4 = new DevExpress.XtraBars.Ribbon.RibbonPage();
-            this.ribbonPageGroup10 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.barCheckItemChartName = new DevExpress.XtraBars.BarCheckItem();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBoxPropertySelect)).BeginInit();
@@ -166,15 +174,21 @@ namespace kMapGIS
             this.barWorkspaceMenuItem1,
             this.barButtonUniqueValue,
             this.barEditItemPropertySelect,
-            this.barButtonGraduatedColors});
+            this.barButtonGraduatedColors,
+            this.barCheckItemLegend,
+            this.barCheckItemArrow,
+            this.barCheckItemScale,
+            this.barCheckItemGrid,
+            this.barCheckItemChartName});
             this.ribbonControl1.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl1.MaxItemId = 61;
+            this.ribbonControl1.MaxItemId = 71;
             this.ribbonControl1.Name = "ribbonControl1";
             this.ribbonControl1.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.ribbonPage1,
             this.ribbonPage2,
             this.ribbonPage3,
-            this.ribbonPage4});
+            this.ribbonPage4,
+            this.ribbonPage5});
             this.ribbonControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemImageEdit1,
             this.repositoryItemPictureEdit1,
@@ -318,7 +332,7 @@ namespace kMapGIS
             // 
             this.barButtonPieChart.Caption = "饼图";
             this.barButtonPieChart.Id = 45;
-            this.barButtonPieChart.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem1.ImageOptions.Image")));
+            this.barButtonPieChart.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonPieChart.ImageOptions.Image")));
             this.barButtonPieChart.Name = "barButtonPieChart";
             this.barButtonPieChart.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
             this.barButtonPieChart.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonPieChart_ItemClick);
@@ -372,6 +386,48 @@ namespace kMapGIS
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.repositoryItemComboBoxPropertySelect.Name = "repositoryItemComboBoxPropertySelect";
             this.repositoryItemComboBoxPropertySelect.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
+            // 
+            // barButtonGraduatedColors
+            // 
+            this.barButtonGraduatedColors.Caption = "分级色彩符号化";
+            this.barButtonGraduatedColors.Id = 60;
+            this.barButtonGraduatedColors.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonGraduatedColors.ImageOptions.Image")));
+            this.barButtonGraduatedColors.Name = "barButtonGraduatedColors";
+            this.barButtonGraduatedColors.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.barButtonGraduatedColors.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonGraduatedColors_ItemClick);
+            // 
+            // barCheckItemLegend
+            // 
+            this.barCheckItemLegend.Caption = "图例";
+            this.barCheckItemLegend.Id = 62;
+            this.barCheckItemLegend.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barCheckItemLegend.ImageOptions.Image")));
+            this.barCheckItemLegend.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barCheckItemLegend.ImageOptions.LargeImage")));
+            this.barCheckItemLegend.Name = "barCheckItemLegend";
+            this.barCheckItemLegend.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            // 
+            // barCheckItemArrow
+            // 
+            this.barCheckItemArrow.Caption = "指北针";
+            this.barCheckItemArrow.Id = 66;
+            this.barCheckItemArrow.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barCheckItemArrow.ImageOptions.Image")));
+            this.barCheckItemArrow.Name = "barCheckItemArrow";
+            this.barCheckItemArrow.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            // 
+            // barCheckItemScale
+            // 
+            this.barCheckItemScale.Caption = "比例尺";
+            this.barCheckItemScale.Id = 67;
+            this.barCheckItemScale.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barCheckItemScale.ImageOptions.Image")));
+            this.barCheckItemScale.Name = "barCheckItemScale";
+            this.barCheckItemScale.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            // 
+            // barCheckItemGrid
+            // 
+            this.barCheckItemGrid.Caption = "地图格网";
+            this.barCheckItemGrid.Id = 68;
+            this.barCheckItemGrid.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barCheckItemGrid.ImageOptions.Image")));
+            this.barCheckItemGrid.Name = "barCheckItemGrid";
+            this.barCheckItemGrid.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
             // 
             // ribbonPage1
             // 
@@ -452,6 +508,41 @@ namespace kMapGIS
             this.ribbonPageGroup8.ItemLinks.Add(this.barButtonUniqueValue);
             this.ribbonPageGroup8.Name = "ribbonPageGroup8";
             this.ribbonPageGroup8.Text = "定性符号化";
+            // 
+            // ribbonPageGroup9
+            // 
+            this.ribbonPageGroup9.ItemLinks.Add(this.barButtonGraduatedColors);
+            this.ribbonPageGroup9.Name = "ribbonPageGroup9";
+            this.ribbonPageGroup9.Text = "定量符号化";
+            // 
+            // ribbonPage4
+            // 
+            this.ribbonPage4.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.ribbonPageGroup10});
+            this.ribbonPage4.Name = "ribbonPage4";
+            this.ribbonPage4.Text = "折旧潜力分析";
+            // 
+            // ribbonPageGroup10
+            // 
+            this.ribbonPageGroup10.Name = "ribbonPageGroup10";
+            this.ribbonPageGroup10.Text = "ribbonPageGroup10";
+            // 
+            // ribbonPage5
+            // 
+            this.ribbonPage5.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
+            this.ribbonPageGroup11});
+            this.ribbonPage5.Name = "ribbonPage5";
+            this.ribbonPage5.Text = "地图整饰";
+            // 
+            // ribbonPageGroup11
+            // 
+            this.ribbonPageGroup11.ItemLinks.Add(this.barCheckItemLegend);
+            this.ribbonPageGroup11.ItemLinks.Add(this.barCheckItemArrow);
+            this.ribbonPageGroup11.ItemLinks.Add(this.barCheckItemScale);
+            this.ribbonPageGroup11.ItemLinks.Add(this.barCheckItemGrid);
+            this.ribbonPageGroup11.ItemLinks.Add(this.barCheckItemChartName);
+            this.ribbonPageGroup11.Name = "ribbonPageGroup11";
+            this.ribbonPageGroup11.Text = "地图整饰";
             // 
             // repositoryItemImageEdit1
             // 
@@ -602,6 +693,7 @@ namespace kMapGIS
             this.MainPageLayoutControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("MainPageLayoutControl.OcxState")));
             this.MainPageLayoutControl.Size = new System.Drawing.Size(1013, 411);
             this.MainPageLayoutControl.TabIndex = 9;
+            this.MainPageLayoutControl.OnMouseDown += new ESRI.ArcGIS.Controls.IPageLayoutControlEvents_Ax_OnMouseDownEventHandler(this.MainPageLayoutControl_OnMouseDown);
             // 
             // tabPageData
             // 
@@ -612,6 +704,9 @@ namespace kMapGIS
             // 
             // gridControl
             // 
+            gridLevelNode2.RelationName = "Level1";
+            this.gridControl.LevelTree.Nodes.AddRange(new DevExpress.XtraGrid.GridLevelNode[] {
+            gridLevelNode2});
             this.gridControl.Location = new System.Drawing.Point(0, -1);
             this.gridControl.MainView = this.gridView1;
             this.gridControl.MenuManager = this.ribbonControl1;
@@ -674,32 +769,13 @@ namespace kMapGIS
             this.popupMenuTOCControl.Name = "popupMenuTOCControl";
             this.popupMenuTOCControl.Ribbon = this.ribbonControl1;
             // 
-            // ribbonPageGroup9
+            // barCheckItemChartName
             // 
-            this.ribbonPageGroup9.ItemLinks.Add(this.barButtonGraduatedColors);
-            this.ribbonPageGroup9.Name = "ribbonPageGroup9";
-            this.ribbonPageGroup9.Text = "定量符号化";
-            // 
-            // barButtonGraduatedColors
-            // 
-            this.barButtonGraduatedColors.Caption = "分级色彩符号化";
-            this.barButtonGraduatedColors.Id = 60;
-            this.barButtonGraduatedColors.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.Image")));
-            this.barButtonGraduatedColors.Name = "barButtonGraduatedColors";
-            this.barButtonGraduatedColors.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
-            this.barButtonGraduatedColors.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonGraduatedColors_ItemClick);
-            // 
-            // ribbonPage4
-            // 
-            this.ribbonPage4.Groups.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPageGroup[] {
-            this.ribbonPageGroup10});
-            this.ribbonPage4.Name = "ribbonPage4";
-            this.ribbonPage4.Text = "折旧潜力分析";
-            // 
-            // ribbonPageGroup10
-            // 
-            this.ribbonPageGroup10.Name = "ribbonPageGroup10";
-            this.ribbonPageGroup10.Text = "ribbonPageGroup10";
+            this.barCheckItemChartName.Caption = "图名";
+            this.barCheckItemChartName.Id = 70;
+            this.barCheckItemChartName.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barCheckItem2.ImageOptions.Image")));
+            this.barCheckItemChartName.Name = "barCheckItemChartName";
+            this.barCheckItemChartName.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
             // 
             // MainForm
             // 
@@ -820,6 +896,13 @@ namespace kMapGIS
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup9;
         private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage4;
         private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup10;
+        private DevExpress.XtraBars.Ribbon.RibbonPage ribbonPage5;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup11;
+        private DevExpress.XtraBars.BarCheckItem barCheckItemLegend;
+        private DevExpress.XtraBars.BarCheckItem barCheckItemArrow;
+        private DevExpress.XtraBars.BarCheckItem barCheckItemScale;
+        private DevExpress.XtraBars.BarCheckItem barCheckItemGrid;
+        private DevExpress.XtraBars.BarCheckItem barCheckItemChartName;
     }
 }
 

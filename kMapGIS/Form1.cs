@@ -12,12 +12,14 @@ using ESRI.ArcGIS.Display;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.Controls;
+using stdole;
 
 namespace kMapGIS
 {
     public partial class MainForm : DevExpress.XtraBars.Ribbon.RibbonForm
     {
         string chartField = "";
+        SymbolSelection symbolSelection;
 
         public MainForm()
         {
@@ -73,19 +75,19 @@ namespace kMapGIS
             {
                 MainMapControl.Pan();
             }
-            IFeatureLayer featureLayer=null;
+            IFeatureLayer featureLayer = null;
             //行政村选择
             if (barCheckSelectVillage.Checked)
             {
-                e = SelectFeatureTrackRec(e,"行政区面",ref featureLayer);
+                e = SelectFeatureTrackRec(e, "行政区面", ref featureLayer);
             }
             //地类选择
             if (barCheckSelectLand.Checked)
             {
-                e = SelectFeatureTrackRec(e,"土地利用",ref featureLayer);
+                e = SelectFeatureTrackRec(e, "土地利用", ref featureLayer);
             }
-        }
 
+        }
         private ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent SelectFeatureTrackRec(ESRI.ArcGIS.Controls.IMapControlEvents2_OnMouseDownEvent e, string layerName, ref IFeatureLayer featureLayer)
         {
             //矩形框选
@@ -167,7 +169,7 @@ namespace kMapGIS
                 dataTable.Columns.Add(fields.get_Field(i).Name);
             }
 
-            IFeatureCursor featureCursor= featureLayer.Search(null, true);
+            IFeatureCursor featureCursor = featureLayer.Search(null, true);
             IFeature feature = featureCursor.NextFeature();
 
             //获取要素的信息
@@ -290,6 +292,23 @@ namespace kMapGIS
 
         private void barButtonBarChart_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            Dictionary<string, IRgbColor> dicFieldColor = new Dictionary<string, IRgbColor>();
+            IRgbColor rgbColor= new RgbColorClass();
+            rgbColor.Red = 255; rgbColor.Green = 0; rgbColor.Blue = 0;
+            dicFieldColor.Add("人口密度归一化", rgbColor);
+            rgbColor = new RgbColorClass();
+            rgbColor.Red = 0; rgbColor.Green = 255; rgbColor.Blue = 0;
+            dicFieldColor.Add("建筑用地归一化", rgbColor);
+            rgbColor = new RgbColorClass();
+            rgbColor.Red = 0; rgbColor.Green = 0; rgbColor.Blue = 255;
+            dicFieldColor.Add("坡度归一化", rgbColor);
+            rgbColor = new RgbColorClass();
+            rgbColor.Red = 255; rgbColor.Green = 255; rgbColor.Blue = 0;
+            dicFieldColor.Add("坡度标准差归一化", rgbColor);
+            rgbColor = new RgbColorClass();
+            rgbColor.Red = 255; rgbColor.Green = 0; rgbColor.Blue = 255;
+            dicFieldColor.Add("海拔归一化", rgbColor);
+
             //获取图层
             IGeoFeatureLayer geoFeatureLayer = MainMapControl.Map.get_Layer(3) as IGeoFeatureLayer;
 
@@ -308,13 +327,19 @@ namespace kMapGIS
             ISymbol preSymbol = geoFeatureLayer.Renderer.get_SymbolByFeature(feature);
             IColor preColor = (preSymbol as IFillSymbol).Color;
 
+            double maxProperty = 0; double maxTemp = 0;
             //找到最大值
-            renderFields.AddField(barEditItemPropertySelect.EditValue.ToString());
-            dataStatistics = new DataStatisticsClass();
-            dataStatistics.Cursor = featureCursor as ICursor;
-            dataStatistics.Field = barEditItemPropertySelect.EditValue.ToString();
+            foreach (KeyValuePair<string, IRgbColor> _keyValue in dicFieldColor)
+            {
+                renderFields.AddField(_keyValue.Key);
+                dataStatistics = new DataStatisticsClass();
+                dataStatistics.Cursor = featureCursor as ICursor;
+                dataStatistics.Field = _keyValue.Key;
 
-            double maxProperty = dataStatistics.Statistics.Maximum;
+                maxTemp = dataStatistics.Statistics.Maximum;
+                if (maxTemp >= maxProperty)
+                    maxProperty = maxTemp;
+            }
 
             //符号变量
             IChartSymbol chartSymbol = null;
@@ -323,7 +348,7 @@ namespace kMapGIS
 
             //条形图大小
             IBarChartSymbol barChartSymbol = new BarChartSymbolClass();
-            barChartSymbol.Width = 6;
+            barChartSymbol.Width = 10;
 
             chartSymbol = barChartSymbol as IChartSymbol;
             markerSymbol = barChartSymbol as IMarkerSymbol;
@@ -332,17 +357,15 @@ namespace kMapGIS
             chartSymbol.MaxValue = maxProperty;
             ISymbolArray symbolArray = barChartSymbol as ISymbolArray;
 
-            //条形图颜色
-            IRgbColor rgbColor = new RgbColorClass();
-            rgbColor.Red = 0;
-            rgbColor.Green = 0;
-            rgbColor.Blue = 255;
+            foreach (KeyValuePair<string, IRgbColor> _keyValue in dicFieldColor)
+            {
+                //条形图颜色
+                fillSymbol = new SimpleFillSymbolClass();
+                fillSymbol.Color = _keyValue.Value;
+                symbolArray.AddSymbol(fillSymbol as ISymbol);
+                chartRender.ChartSymbol = barChartSymbol as IChartSymbol;
+            }
 
-            fillSymbol = new SimpleFillSymbolClass();
-            fillSymbol.Color = rgbColor;
-
-            symbolArray.AddSymbol(fillSymbol as ISymbol);
-            chartRender.ChartSymbol = barChartSymbol as IChartSymbol;
 
             //底图颜色
             rgbColor = new RgbColorClass();
@@ -351,7 +374,7 @@ namespace kMapGIS
             rgbColor.Blue = 0;
             fillSymbol = new SimpleFillSymbolClass();
             fillSymbol.Color = rgbColor;
-            chartRender.BaseSymbol =preSymbol as ISymbol;
+            chartRender.BaseSymbol = preSymbol as ISymbol;
 
             //进行渲染
             chartRender.UseOverposter = false;
@@ -389,7 +412,7 @@ namespace kMapGIS
                 barEditItemPropertySelect.EditValue.ToString();
                 feature = featureCursor.NextFeature();
 
-                IFillSymbol fillSymbol=new SimpleFillSymbolClass();
+                IFillSymbol fillSymbol = new SimpleFillSymbolClass();
                 fillSymbol.Color = enumColors.Next();
                 uniqueRender.AddValue(codeValue.ToString(), "", fillSymbol as ISymbol);
             }
@@ -402,13 +425,78 @@ namespace kMapGIS
         private void barButtonGraduatedColors_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             IGeoFeatureLayer geoFeatureLayer = MainMapControl.Map.get_Layer(3) as IGeoFeatureLayer;
+            object dataFrequency,dataValues;
 
-            IBasicHistogram basicHistogram = new BasicTableHistogramClass();
+            ITableHistogram tableHistogram = new BasicTableHistogramClass();
+            IBasicHistogram basicHistogram = (IBasicHistogram)tableHistogram;
+            tableHistogram.Field = barEditItemPropertySelect.EditValue.ToString();
+            tableHistogram.Table = geoFeatureLayer.FeatureClass as ITable;
 
+            basicHistogram.GetHistogram(out dataValues, out dataFrequency);
+            IClassifyGEN classifyGEN = new EqualIntervalClass();
+            classifyGEN.Classify(dataValues, dataFrequency, 5);
+
+            double[] classes = classifyGEN.ClassBreaks as double[];
+            int classesCount = classes.GetUpperBound(0);
+            IClassBreaksRenderer classBreaksRenderer = new ClassBreaksRendererClass();
+
+            classBreaksRenderer.Field = barEditItemPropertySelect.EditValue.ToString();
+            classBreaksRenderer.BreakCount = classesCount;
+            classBreaksRenderer.SortClassesAscending = true;
+
+            IHsvColor fromColor = new HsvColorClass();
+            fromColor.Hue = 0; fromColor.Saturation = 50;
+            fromColor.Value = 96;
+            IHsvColor toColor = new HsvColorClass();
+            toColor.Hue = 80;
+            toColor.Saturation = 100;
+            toColor.Value = 96;
+            bool ok;
+
+            //产生色带
+            IAlgorithmicColorRamp algorithmicCR = new AlgorithmicColorRampClass();
+            algorithmicCR.Algorithm = esriColorRampAlgorithm.esriHSVAlgorithm;
+            algorithmicCR.FromColor = fromColor;
+            algorithmicCR.ToColor = toColor;
+            algorithmicCR.Size = classesCount;
+            algorithmicCR.CreateRamp(out ok);
+
+            //获得颜色
+            IEnumColors enumColors = algorithmicCR.Colors;
+            for (int breakIndex = 0; breakIndex <= classesCount - 1; breakIndex++)
+            {
+                IColor color = enumColors.Next();
+                
+                ISimpleFillSymbol simpleFill = new SimpleFillSymbolClass();
+                simpleFill.Color = color;
+                simpleFill.Style = esriSimpleFillStyle.esriSFSSolid;
+                classBreaksRenderer.set_Symbol(breakIndex, (ISymbol)simpleFill);
+                classBreaksRenderer.set_Break(breakIndex, classes[breakIndex + 1]);
+            }
+            geoFeatureLayer.Renderer = (IFeatureRenderer)classBreaksRenderer;
+            MainMapControl.Refresh();
+            MainTOCControl.Update();
         }
 
         private void barButtonPieChart_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            Dictionary<string, IRgbColor> dicFieldColor = new Dictionary<string, IRgbColor>();
+            IRgbColor rgbColor= new RgbColorClass();
+            rgbColor.Red = 255; rgbColor.Green = 0; rgbColor.Blue = 0;
+            dicFieldColor.Add("人口密度归一化", rgbColor);
+            rgbColor = new RgbColorClass();
+            rgbColor.Red = 0; rgbColor.Green = 255; rgbColor.Blue = 0;
+            dicFieldColor.Add("建筑用地归一化", rgbColor);
+            rgbColor = new RgbColorClass();
+            rgbColor.Red = 0; rgbColor.Green = 0; rgbColor.Blue = 255;
+            dicFieldColor.Add("坡度归一化", rgbColor);
+            rgbColor = new RgbColorClass();
+            rgbColor.Red = 255; rgbColor.Green = 255; rgbColor.Blue = 0;
+            dicFieldColor.Add("坡度标准差归一化", rgbColor);
+            rgbColor = new RgbColorClass();
+            rgbColor.Red = 255; rgbColor.Green = 0; rgbColor.Blue = 255;
+            dicFieldColor.Add("海拔归一化", rgbColor);
+
             //获取图层
             IGeoFeatureLayer geoFeatureLayer = MainMapControl.Map.get_Layer(3) as IGeoFeatureLayer;
 
@@ -427,14 +515,20 @@ namespace kMapGIS
             ISymbol preSymbol = geoFeatureLayer.Renderer.get_SymbolByFeature(feature);
             IColor preColor = (preSymbol as IFillSymbol).Color;
 
+            double maxProperty = 0; double maxTemp = 0;
             //找到最大值
-            renderFields.AddField(barEditItemPropertySelect.EditValue.ToString());
-            dataStatistics = new DataStatisticsClass();
-            dataStatistics.Cursor = featureCursor as ICursor;
-            dataStatistics.Field = barEditItemPropertySelect.EditValue.ToString();
+            foreach (KeyValuePair<string, IRgbColor> _keyValue in dicFieldColor)
+            {
+                //找到最大值
+                renderFields.AddField(_keyValue.Key);
+                dataStatistics = new DataStatisticsClass();
+                dataStatistics.Cursor = featureCursor as ICursor;
+                dataStatistics.Field = _keyValue.Key;
 
-            double maxProperty = dataStatistics.Statistics.Maximum;
-
+                maxTemp= dataStatistics.Statistics.Maximum;
+                if (maxTemp >= maxProperty)
+                    maxProperty = maxTemp;
+            }
             //符号变量
             IChartSymbol chartSymbol = null;
             IFillSymbol fillSymbol = null;
@@ -446,7 +540,7 @@ namespace kMapGIS
             pieChartSymbol.UseOutline = true;
             ILineSymbol lineSymbol = new SimpleLineSymbolClass();
 
-            IRgbColor rgbColor = new RgbColorClass();
+            rgbColor = new RgbColorClass();
             rgbColor.Red = 100;
             rgbColor.Green = 205;
             rgbColor.Blue = 30;
@@ -467,11 +561,15 @@ namespace kMapGIS
             rgbColor1.Green = 0;
             rgbColor1.Blue = 255;
 
-            fillSymbol = new SimpleFillSymbolClass();
-            fillSymbol.Color = rgbColor1;
 
-            symbolArray.AddSymbol(fillSymbol as ISymbol);
-            chartRender.ChartSymbol = pieChartSymbol as IChartSymbol;
+            foreach (KeyValuePair<string, IRgbColor> _keyValue in dicFieldColor)
+            {
+                //饼图颜色
+                fillSymbol = new SimpleFillSymbolClass();
+                fillSymbol.Color = _keyValue.Value;
+                symbolArray.AddSymbol(fillSymbol as ISymbol);
+                chartRender.ChartSymbol = pieChartSymbol as IChartSymbol;
+            }
 
             //底图颜色
             chartRender.BaseSymbol = preSymbol as ISymbol;
@@ -482,6 +580,312 @@ namespace kMapGIS
             geoFeatureLayer.Renderer = chartRender as IFeatureRenderer;
             MainMapControl.Refresh();
             MainTOCControl.Update();
+        }
+
+        private void MakeLegend(IEnvelope envelope)
+        {
+            //地图图例
+            IGraphicsContainer graphicsContainer = MainPageLayoutControl.PageLayout as IGraphicsContainer;
+            IMapFrame mapFrame = graphicsContainer.FindFrame(MainPageLayoutControl.ActiveView.FocusMap) as IMapFrame;
+
+            UID id = new UID();
+            id.Value = "esriCarto.Legend";
+            IMapSurroundFrame mapSurroundFrame = mapFrame.CreateSurroundFrame(id, null);
+            //如果先前存在图例则删除
+            IElement deleteElement = MainPageLayoutControl.FindElementByName("Legend");
+            if (deleteElement != null)
+            {
+                graphicsContainer.DeleteElement(deleteElement);
+            }
+
+            //设置图例背景
+            ISymbolBackground symbolBackground = new SymbolBackgroundClass();
+            IFillSymbol fillSymbol = new SimpleFillSymbolClass();
+            ILineSymbol lineSymbol = new SimpleLineSymbolClass();
+
+            RgbColor colorLine = new RgbColorClass();
+            colorLine.Red = 240; colorLine.Green = 240; colorLine.Blue = 240;
+            RgbColor colorFill = new RgbColorClass();
+            colorFill.Red = 240; colorFill.Green = 240; colorFill.Blue = 240;
+
+            fillSymbol.Outline = lineSymbol;
+            fillSymbol.Color = colorFill;
+            symbolBackground.FillSymbol = fillSymbol;
+            mapSurroundFrame.Background = symbolBackground;
+
+            IElement element = mapSurroundFrame as IElement;
+            element.Geometry = envelope as IGeometry;
+            IMapSurround mapSurround = mapSurroundFrame.MapSurround;
+            ILegend legend = mapSurround as ILegend;
+            legend.ClearItems();
+            legend.Title = "图例";
+            for (int i = 0; i < MainPageLayoutControl.ActiveView.FocusMap.LayerCount; i++)
+            {
+                ILegendItem legendItem = new HorizontalLegendItemClass();
+                legendItem.Layer = MainPageLayoutControl.ActiveView.FocusMap.get_Layer(i);
+                legendItem.ShowDescriptions = false;
+                legendItem.Columns = 1;
+                legendItem.ShowHeading = true;
+                legendItem.ShowLabels = true;
+                legend.AddItem(legendItem);
+            }
+            graphicsContainer.AddElement(element, 0);
+            MainPageLayoutControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+
+        }
+
+        private void AddScaleBar(IEnvelope envelope, IStyleGalleryItem styleGalleryItem)
+        {
+            //地图图例
+            IGraphicsContainer graphicsContainer = MainPageLayoutControl.PageLayout as IGraphicsContainer;
+            IMapFrame mapFrame = graphicsContainer.FindFrame(MainPageLayoutControl.ActiveView.FocusMap) as IMapFrame;
+
+            IMapSurroundFrame mapSurroundFrame = new MapSurroundFrameClass();
+            mapSurroundFrame.MapFrame = mapFrame;
+            mapSurroundFrame.MapSurround = (IMapSurround)styleGalleryItem.Item;
+
+            IElement element = MainPageLayoutControl.FindElementByName("ScaleBar");
+            if (element != null)
+            {
+                graphicsContainer.DeleteElement(element);
+            }
+
+            IElementProperties elementProperties = null;
+            element = (IElement)mapSurroundFrame;
+            element.Geometry = (IGeometry)envelope;
+
+            elementProperties = element as IElementProperties;
+            elementProperties.Name = "ScaleBar";
+            graphicsContainer.AddElement(element, 0);
+            MainPageLayoutControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+        }
+
+        private void AddNorthArrow(IEnvelope envelope, IStyleGalleryItem styleGalleryItem)
+        {
+            //地图图例
+            IGraphicsContainer graphicsContainer = MainPageLayoutControl.PageLayout as IGraphicsContainer;
+            IMapFrame mapFrame = graphicsContainer.FindFrame(MainPageLayoutControl.ActiveView.FocusMap) as IMapFrame;
+
+            IMapSurroundFrame mapSurroundFrame = new MapSurroundFrameClass();
+            mapSurroundFrame.MapFrame = mapFrame;
+            INorthArrow northArrow = new MarkerNorthArrowClass();
+            northArrow = styleGalleryItem.Item as INorthArrow;
+            northArrow.Size = envelope.Width * 50;
+
+            mapSurroundFrame.MapSurround = (IMapSurround)northArrow;
+            IElement element = MainPageLayoutControl.FindElementByName("NorthArrows");
+            if (element != null)
+            {
+                graphicsContainer.DeleteElement(element);
+            }
+            IElementProperties elementProperties = null;
+            element = (IElement)mapSurroundFrame;
+            element.Geometry = (IGeometry)envelope;
+            elementProperties = element as IElementProperties;
+            elementProperties.Name = "NorthArrows";
+            graphicsContainer.AddElement(element, 0);
+            MainPageLayoutControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+        }
+
+        private void AddGrid()
+        {
+            /*
+            //添加格网
+            IMap map = MainPageLayoutControl.ActiveView.FocusMap;
+            IMeasuredGrid measureGrid = new MeasuredGridClass();
+
+            measureGrid.FixedOrigin = false;
+            measureGrid.Units = map.MapUnits;
+            measureGrid.XIntervalSize = 5;
+            measureGrid.YIntervalSize = 5;
+
+            IGridLabel gridLabel = new FormattedGridLabelClass();
+            IFormattedGridLabel formattedGridLabel = new FormattedGridLabelClass();
+            INumericFormat numericFormat = new NumericFormatClass();
+            numericFormat.AlignmentOption = esriNumericAlignmentEnum.esriAlignLeft;
+            numericFormat.RoundingOption = esriRoundingOptionEnum.esriRoundNumberOfDecimals;
+            numericFormat.RoundingValue = 0;
+            numericFormat.ZeroPad = true;
+            formattedGridLabel.Format = numericFormat as INumberFormat;
+            gridLabel = formattedGridLabel as IGridLabel;
+            StdFont font = new stdole.StdFontClass();
+            font.Name = "Times New Roman";
+            font.Size = 25;
+            gridLabel.Font = font as IFontDisp;
+
+            IMapGrid mapGrid = new MeasuredGridClass();
+            mapGrid = measureGrid as IMapGrid;
+
+            mapGrid.LabelFormat = gridLabel;
+            IGraphicsContainer graphicsContainer = MainPageLayoutControl.PageLayout as IGraphicsContainer;
+            IFrameElement frameElement = graphicsContainer.FindFrame(map);
+            IMapFrame mapFrame = frameElement as IMapFrame;
+
+            IMapGrids mapGrids = null;
+            mapGrids = mapFrame as IMapGrids;
+            mapGrids.AddMapGrid(mapGrid);
+            MainPageLayoutControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, null, null);
+            */
+            IMap map = MainPageLayoutControl.ActiveView.FocusMap;
+            IGraticule graticule = new GraticuleClass();
+
+            //格网线符号样式
+            ICartographicLineSymbol lineSymbol;
+            lineSymbol = new CartographicLineSymbolClass();
+            lineSymbol.Cap = esriLineCapStyle.esriLCSButt;
+            lineSymbol.Width = 1;
+            IRgbColor rgbColorLineSymbol = new RgbColorClass();
+            rgbColorLineSymbol.Red = 166; rgbColorLineSymbol.Green = 187; rgbColorLineSymbol.Blue = 208;
+            lineSymbol.Color = rgbColorLineSymbol;
+
+            //格网边框样式
+            ISimpleMapGridBorder simpleMapGridBorder = new SimpleMapGridBorderClass();
+            ISimpleLineSymbol simpleLineSymbol = new SimpleLineSymbolClass();
+            simpleLineSymbol.Style= esriSimpleLineStyle.esriSLSSolid;
+            IRgbColor rgbColorSimpleLine = new RgbColorClass();
+            rgbColorSimpleLine.Red = 100; rgbColorSimpleLine.Green = 255; rgbColorSimpleLine.Blue = 0;
+            simpleLineSymbol.Color = rgbColorSimpleLine;
+            simpleLineSymbol.Width = 2;
+            simpleMapGridBorder.LineSymbol = simpleLineSymbol as ILineSymbol;
+            graticule.Border = simpleMapGridBorder as IMapGridBorder;
+            graticule.SetTickVisibility(true, true, true, true);
+
+            //格网刻度样式
+            graticule.TickLength = 15;
+            lineSymbol = new CartographicLineSymbolClass();
+            lineSymbol.Cap = esriLineCapStyle.esriLCSButt;
+            lineSymbol.Width = 1;
+            rgbColorLineSymbol.Red = 255; rgbColorLineSymbol.Green = 187; rgbColorLineSymbol.Blue = 208;
+            lineSymbol.Color = rgbColorLineSymbol;
+            graticule.TickMarkSymbol = null;
+            graticule.TickLineSymbol = lineSymbol;
+            graticule.SetTickVisibility(true, true, true, true);
+
+            //格网次级刻度
+            graticule.SubTickCount = 5;
+            graticule.SubTickLength = 10;
+            lineSymbol = new CartographicLineSymbolClass();
+            lineSymbol.Cap = esriLineCapStyle.esriLCSButt;
+            lineSymbol.Width = 0.1;
+            rgbColorLineSymbol.Red = 166; rgbColorLineSymbol.Green = 187; rgbColorLineSymbol.Blue = 208;
+            lineSymbol.Color = rgbColorLineSymbol;
+            graticule.SubTickLineSymbol = lineSymbol;
+            graticule.SetSubTickVisibility(true, true, true, true);
+
+            //格网标签样式
+            IGridLabel gridLabel = graticule.LabelFormat;
+            gridLabel.LabelOffset = 15;
+            stdole.StdFont font = new stdole.StdFont();
+            font.Name = "Arial";
+            font.Size = 16;
+            graticule.LabelFormat.Font = font as stdole.IFontDisp;
+            graticule.Visible = true;
+
+            //创建格网
+            IMeasuredGrid measureGrid = new MeasuredGridClass();
+            IProjectedGrid projectedGrid = measureGrid as IProjectedGrid;
+            projectedGrid.SpatialReference = map.SpatialReference;
+            measureGrid = graticule as IMeasuredGrid;
+
+            double maxX, maxY, minX, minY;
+            projectedGrid.SpatialReference.GetDomain(out minX, out maxX, out minY, out maxY);
+            measureGrid.FixedOrigin = true;
+            measureGrid.Units = map.MapUnits;
+            measureGrid.XIntervalSize = (maxX - minX) / 200;
+            measureGrid.XOrigin = minX;
+            measureGrid.YIntervalSize = (maxY - minY) / 200;
+            measureGrid.YOrigin=minY;
+
+            IGraphicsContainer graphicsContainer = MainPageLayoutControl.ActiveView as IGraphicsContainer;
+            IMapFrame mapFrame = graphicsContainer.FindFrame(map) as IMapFrame;
+            IMapGrids mapGrids = mapFrame as IMapGrids;
+            mapGrids.AddMapGrid(graticule);
+            MainPageLayoutControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewBackground, null, null);
+        }
+
+        private void AddChartName(IEnvelope envelope)
+        {
+            stdole.IFontDisp font;
+            font = new stdole.StdFontClass() as stdole.IFontDisp;
+            font.Name = "宋体";
+
+            ITextSymbol textSymbol = new TextSymbolClass();
+            textSymbol.Size = 80;
+            textSymbol.Font = font;
+
+            ITextElement textElement = new TextElementClass();
+            textElement.Symbol=textSymbol;
+            textElement.Text="横车镇土地利用图";
+
+            IElement element=textElement as  IElement;
+            element.Geometry = envelope as IGeometry;
+
+            IGraphicsContainer graphicsContainer = MainPageLayoutControl.ActiveView as IGraphicsContainer;
+            graphicsContainer.AddElement(element,0);
+            MainPageLayoutControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGraphics, null, null);
+        }
+        private void MainPageLayoutControl_OnMouseDown(object sender, IPageLayoutControlEvents_OnMouseDownEvent e)
+        {
+            if (barCheckItemLegend.Checked)
+            {
+                //图例
+                IEnvelope envelope = TrackRectangle(e);
+                MakeLegend(envelope);
+                barCheckItemLegend.Checked = false;
+            }
+            else if (barCheckItemArrow.Checked)
+            {
+                //指北针
+                IEnvelope envelope = TrackRectangle(e);
+                SymbolSelection symbolSelection = new SymbolSelection();
+                symbolSelection.LoadSymbol(1);
+                symbolSelection.ShowDialog();
+
+                AddNorthArrow(envelope, symbolSelection.selectGalleryItem);
+                barCheckItemArrow.Checked = false;
+            }
+            else if (barCheckItemScale.Checked)
+            {
+                //比例尺
+                IEnvelope envelope = TrackRectangle(e);
+                SymbolSelection symbolSelection = new SymbolSelection();
+                symbolSelection.LoadSymbol(2);
+                symbolSelection.ShowDialog();
+
+                AddScaleBar(envelope, symbolSelection.selectGalleryItem);
+                barCheckItemScale.Checked = false;
+            }
+            else if (barCheckItemGrid.Checked)
+            {
+                //地图格网
+                AddGrid();
+                barCheckItemGrid.Checked = false;
+            }
+            else if (barCheckItemChartName.Checked)
+            {
+                //地图图名
+                IEnvelope envelope = TrackRectangle(e);
+                AddChartName(envelope);
+                barCheckItemChartName.Checked = false;
+            }
+        }
+
+        private IEnvelope TrackRectangle(IPageLayoutControlEvents_OnMouseDownEvent e)
+        {
+            //矩形框选
+            IEnvelope envelope = MainPageLayoutControl.TrackRectangle();
+            IGeometry geometry = envelope as IGeometry;
+            if (geometry.IsEmpty == true)
+            {
+                tagRECT r;
+                r.left = e.x - 1;
+                r.top = e.y - 1;
+                r.right = e.x + 1;
+                r.bottom = e.y - 1;
+                MainPageLayoutControl.ActiveView.ScreenDisplay.DisplayTransformation.TransformRect(envelope, ref r, 4);
+                envelope.SpatialReference = MainPageLayoutControl.ActiveView.FocusMap.SpatialReference;
+            }
+            return envelope;
         }
     }
 }
